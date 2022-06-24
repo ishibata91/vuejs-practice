@@ -11,7 +11,7 @@ function deleteTodo(id) {
   const todo = todoListRef.value.find((todo) => todo.id == id);
   const idx = todoListRef.value.findIndex((todo) => todo.id == id);
 
-  const delMsg = "「"+todo.task+"」を削除しますか？";
+  const delMsg = "「" + todo.task + "」を削除しますか？";
   if (!confirm(delMsg)) return;
 
   todoListRef.value.splice(idx, 1);
