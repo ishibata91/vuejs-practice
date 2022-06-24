@@ -7,6 +7,7 @@
 <style scoped>
 .footer {
   margin-top: 15px;
-  height: 30px;
+  color: red;
 }
+
 </style>
