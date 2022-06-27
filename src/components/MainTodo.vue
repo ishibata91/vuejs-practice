@@ -1,46 +1,28 @@
 <script setup>
 import { ref } from "vue";
+import { useTodoList } from './composables/useTodoList.js';
 const todoRef = ref("");
-const todoListRef = ref([]);
-const Is = localStorage.todoList;
-todoListRef.value = Is ? JSON.parse(Is) : [];
 const isEditRef = ref(false);
-let editId = -1;
+const {todoListRef, add, show, edit, del, check} = useTodoList()
 //削除用関数。IDを利用してローカルストレージの値を代入して置き換えてく。
 function deleteTodo(id) {
-  const todo = todoListRef.value.find((todo) => todo.id == id);
-  const idx = todoListRef.value.findIndex((todo) => todo.id == id);
-
-  const delMsg = "「" + todo.task + "」を削除しますか？";
-  if (!confirm(delMsg)) return;
-
-  todoListRef.value.splice(idx, 1);
-  localStorage.todoList = JSON.stringify(todoListRef.value);
+  del(id)
 }
 //編集用関数。ローカルストレージから代入して置き換えてく
 function editTodo() {
-  const todo = todoListRef.value.find((todo) => todo.id == editId);
-  const idx = todoListRef.value.findIndex((todo) => todo.id == editId);
-  todo.task = todoRef.value;
-  todoListRef.value.splice(idx, 1, todo);
-  localStorage.todolist = JSON.stringify(todoListRef.value);
+  edit(todoRef.value);
   isEditRef.value = false;
-  editIndex = -1;
   todoRef.value = "";
 }
 //データ追加用。まずリストに追加してそのままローカルストレージへ
 function addTodo() {
-  const id = new Date().getTime();
-  todoListRef.value.push({ id: id, task: todoRef.value });
-  localStorage.todoList = JSON.stringify(todoListRef.value);
+  add(todoRef.value);
   todoRef.value = "";
 }
 //編集モード移行用。押されたデータのIDは表示されていないがあるので取ってきて、入力ボックスの値に。また、編集モード用のフラグをオンに。
 function showTodo(id) {
-  const todo = todoListRef.value.find((todo) => todo.id === id);
-  todoRef.value = todo.task;
+  todoRef.value = show(id)
   isEditRef.value = true;
-  editId = id;
 }
 
 </script>
